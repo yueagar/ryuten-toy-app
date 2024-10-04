@@ -1,0 +1,14 @@
+ok - make a react native app 
+single page
+contains a list of all the ryuten servers
+each list item has the server region, mode, total players and alive players count
+fetch the data on a regular interval
+follow whatever best practices u can find online and try to reduce the component re-rendering as much as possible
+use expo to setup everything
+and zustand as your store
+to store the server data
+
+design is on you - dont matter that much since we have a ui designer on team but yeah sometimes you need you use ur own design skills for small stuff
+https://<region>.ryuten.io/server-0<1-5>/info
+region: as eu na sa
+eg: https://as.ryuten.io/server-01/info
