@@ -3,7 +3,18 @@ import Text from "./Text";
 
 import Server from "./Server";
 
+let count = {
+    as: 0,
+    eu: 0,
+    na: 0,
+    sa: 0
+};
+
 const Region = ({ name, servers }) => {
+    count[name]++;
+
+    console.log("3 Render Region [", name, "] -", count[name]);
+
     return (
         <View>
             <View>
@@ -11,10 +22,10 @@ const Region = ({ name, servers }) => {
             </View>
             <View style={styles.headers}>
                 <Text style={styles.header} fontSize="subheading">ID</Text>
-                <Text style={{...styles.header, borderLeftWidth: 0, borderRightWidth: 0}} fontSize="subheading">Alive</Text>
+                <Text style={{ ...styles.header, borderLeftWidth: 0, borderRightWidth: 0 }} fontSize="subheading">Alive</Text>
                 <Text style={styles.header} fontSize="subheading">Total</Text>
             </View>
-            {servers.sort((a, b) => a.id - b.id).map(server => <Server key={server.id} server={server} />)}
+            {servers.sort((a, b) => a.id - b.id).map(server => <Server key={server.id} region={name} server={server} />)}
         </View>
     )
 }

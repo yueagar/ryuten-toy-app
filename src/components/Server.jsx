@@ -1,12 +1,27 @@
 import { View, StyleSheet } from "react-native";
 import Text from "./Text";
 
-const Server = ({ server }) => {
+import ServerStatus from "../services/ServerStatus";
+
+let count = {
+    as: [0, 0, 0, 0, 0],
+    eu: [0, 0, 0, 0, 0],
+    na: [0, 0, 0, 0, 0],
+    sa: [0, 0, 0, 0, 0]
+};
+
+const Server = ({ region, server }) => {
+    count[region][server.id - 1]++;
+
+    console.log("4 Render Server {", region, server.id, "} -", count[region][server.id - 1]);
+
+    const data = ServerStatus.store(state => state.regions[region][server.id - 1]);
+
     return (
         <View style={styles.row}>
-            <Text style={styles.cell}>{server.id}</Text>
-            <Text style={{...styles.cell, borderLeftWidth: 0, borderRightWidth: 0}}>{server.alive}</Text>
-            <Text style={styles.cell}>{server.players}</Text>
+            <Text style={styles.cell}>{data.id}</Text>
+            <Text style={{ ...styles.cell, borderLeftWidth: 0, borderRightWidth: 0 }}>{data.alive}</Text>
+            <Text style={styles.cell}>{data.players}</Text>
         </View>
     )
 }

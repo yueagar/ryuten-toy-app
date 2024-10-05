@@ -2,11 +2,12 @@ import { create } from "zustand";
 
 const store = create((set) => ({
     regions: {
-        as: [],
-        eu: [],
-        na: [],
-        sa: []
+        as: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+        eu: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+        na: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+        sa: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
     },
+    time: new Date().toLocaleTimeString(),
     setServer: (region, id, data) => set((state) => {
         // console.log(region, id, data);
         return {
@@ -17,7 +18,8 @@ const store = create((set) => ({
                         ? { ...data, id }
                         : server)
                     : state.regions[region].concat({ ...data, id })
-            }
+            },
+            time: new Date().toLocaleTimeString()
         };
     })
 }));
@@ -29,16 +31,25 @@ const get = (region, id) => {
 };
 
 const getAll = () => {
+    console.log("* Getting all servers' data");
     ["as", "eu", "na", "sa"].forEach(region => {
         for (let id = 1; id <= 5; id++) {
             get(region, id)
-                .then(data => store.getState().setServer(region, id, data));
+                .then(data => !compare(store.getState().regions[region][id - 1], { ...data, id }) && store.getState().setServer(region, id, data));
         }
     });
 }
+
+const getOne = (region, id) => {
+    get(region, id)
+        .then(data => !compare(store.getState().regions[region][id - 1], { ...data, id }) && store.getState().setServer(region, id, data));
+
+}
+
+const compare = (a, b) => a.id === b.id && a.alive === b.alive && a.players === b.players;
 
 const autoUpdateInterval = setInterval(() => {
     getAll();
 }, 60000);
 
-export default { store, get, getAll, autoUpdateInterval };
+export default { store, get, getAll, getOne, autoUpdateInterval };

@@ -2,27 +2,38 @@ import { useEffect } from "react";
 import { View, Pressable, FlatList, StyleSheet } from "react-native";
 import Text from "./Text";
 
-import ServerStatus from "../services/ServerStatus";
-
+import Time from "./Time";
 import Region from "./Region";
 
+import ServerStatus from "../services/ServerStatus";
+
+const dataObj = {
+    as: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+    eu: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+    na: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+    sa: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
+};
+
+let count = 0;
+
 const Main = () => {
+    count++;
+
     useEffect(() => {
         ServerStatus.getAll();
     }, []);
 
-    const data = ServerStatus.store(state => state.regions);
+    console.log("1 Render Main -", count);
+
     return (
         <View style={styles.container}>
-            <Text>
-                Last Update: {new Date().toLocaleTimeString()}
-            </Text>
+            <Time />
             <Pressable style={styles.refreshBtn} onPress={ServerStatus.getAll}>
                 <Text fontSize="subheading">Refresh</Text>
             </Pressable>
             <Separator />
             <FlatList
-                data={Object.entries(data)}
+                data={Object.entries(dataObj)}
                 ItemSeparatorComponent={Separator}
                 renderItem={({ item }) => <Region key={item[0]} name={item[0]} servers={item[1]} />}
             />
